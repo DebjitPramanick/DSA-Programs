@@ -1,3 +1,6 @@
+// Delete consecutive elements with sum 0
+
+
 #include <iostream>
 using namespace std;
 
