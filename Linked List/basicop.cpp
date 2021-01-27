@@ -17,7 +17,7 @@ class Node
         Node *next;
 };
 
-Node *head, *temp, *newnode, *nextnode;
+Node *head, *temp, *newnode, *nextnode, *cur;
 
 
 void createNode(int d)
@@ -50,8 +50,6 @@ void displayList(){
 }
 
 
-
-
 void sort(){
     int result;
     
@@ -80,16 +78,65 @@ void sort(){
     displayList();
 }
 
-void findMiddle(){
 
+void findMiddle(){
+    struct Node *slow_ptr = head;
+    struct Node *fast_ptr = head;
+
+    if (head != NULL)
+    {
+        while (fast_ptr != NULL && fast_ptr->next != NULL)
+        {
+            fast_ptr = fast_ptr->next->next;
+            slow_ptr = slow_ptr->next;
+        }
+        printf("The middle element is [%d]\n\n", slow_ptr->data);
+    }
 }
+
 
 void deleteDup(){
+    temp = head;
 
+    while (temp != NULL && temp->next != NULL)
+    {
+        cur = temp;
+
+        while (cur->next != NULL)
+        {
+            if (temp->data == cur->next->data)
+            {
+                nextnode = cur->next;
+                cur->next = cur->next->next;
+                delete (nextnode);
+            }
+            else
+                cur = cur->next;
+        }
+        temp = temp->next;
+    }
+
+    displayList();
 }
 
-void search(){
 
+void search(){
+    int x, found;
+    cout<<"Enter element to search : ";
+    cin>>x;
+
+    temp = head;
+
+    while(temp!=0){
+        if(temp->data == x){
+            found = 1;
+            break;
+        }
+        temp = temp->next;
+    }
+
+    if(found == 1) cout<<"Element found.";
+    else cout<<"Element not found.";
 }
 
 
