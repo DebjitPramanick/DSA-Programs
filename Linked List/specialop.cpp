@@ -1,17 +1,18 @@
 // Delete consecutive elements with sum 0
-
+// Find nth node from the end of linked list
+// Detect loop in linked list
+// Remove loop from list
 
 #include <iostream>
 using namespace std;
 
-class Node
+struct Node
 {
-public:
     int data;
     Node *next;
 };
 
-Node *head, *temp, *newnode, *nextnode, *cur;
+Node *head, *temp, *newnode, *nextnode, *cur, *pre, *last, *first;
 
 void createNode(int d)
 {
@@ -40,7 +41,21 @@ void displayList()
 
     while (temp != NULL)
     {
-        cout << temp->data << "        ";
+        cout << temp->data <<"\t\t";
+        temp = temp->next;
+    }
+}
+
+void displayWithNode(struct Node* start)
+{
+
+    cout << "List is : \n";
+
+    temp = start;
+
+    while (temp != NULL)
+    {
+        cout << temp->data << "\t\t";
         temp = temp->next;
     }
 }
@@ -78,22 +93,142 @@ void deleteCons(){
     displayList();
 }
 
+void findFromLast(){
+    temp = head;
+    int c = 0,i;
+    int t;
+
+    cout<<"Enter idex of node from last : ";
+    cin>>i;
+
+    while(temp != 0){
+        c++;
+        temp = temp->next;
+    }
+
+    t = (c-i)+1;
+
+    c= 0;
+    temp = head;
+    cur = 0;
+    while(c<t){
+        c++;
+        cur = temp;
+        temp = temp->next;
+    }
+
+    cout<<cur->data;
+
+
+}
+
+void deleteMiddle(){
+    temp = head;
+    cur = head;
+    pre = 0;
+
+    while(temp != NULL && temp->next != NULL){
+        pre = cur;
+        temp = temp->next->next;
+        cur = cur->next;
+    }
+
+    pre->next = cur->next;
+    delete(cur);
+
+    displayList();
+}
+
+void removeLoop(struct Node* r){
+
+    struct Node* p1;
+    struct Node *p2;
+
+    p1 = head;
+
+    while(1){
+        p2 = r;
+
+        while(p2->next != r && p2->next != p1)
+            p2 = p2->next;
+            
+        if(p2->next == p1) break;
+        
+        p1 = p1->next;
+    }
+
+    p2->next = NULL;
+}
+
+void detectLoop(){
+
+    // last = head;
+    // first = head;
+
+    // while (last != 0)
+    // {
+    //     last = last->next;
+    // }
+
+    // last->next = first->next->next->next;
+
+    temp = head;
+    cur = head;
+
+    while (temp != NULL && temp->next != NULL)
+    {
+        temp = temp->next->next;
+        cur = cur->next;
+
+        if(cur == temp) removeLoop(cur);
+    }
+
+    displayList();
+
+}
+
+Node *reverseInGroup (Node *t, int k)  
+{  
+    Node* current = t;  
+    Node* next = NULL;  
+    Node* prev = NULL;  
+    int count = 0;  
+
+    while (current != NULL && count < k)  
+    {  
+        next = current->next;  
+        current->next = prev;  
+        prev = current;  
+        current = next;  
+        count++;  
+    }  
+
+    if (next != NULL)  
+    t->next = reverseInGroup(next, k);  
+  
+    /* prev is new head of the input list */
+    return prev;  
+}  
+  
 
 int main()
 {
+    struct Node *NODE;
+
     head = NULL;
+    int l;
 
     int n, x, ch;
     int exit = 0;
 
-    n = 0;
+    n = 1;
 
     cout << "Create nodes\n";
 
-    while (n < 6)
+    while (n < 12)
     {
-        cin >> x;
-        createNode(x);
+        //cin >> x;
+        createNode(n*2);
         n = n + 1;
     }
 
@@ -103,7 +238,7 @@ int main()
 
     while (exit == 0)
     {
-        cout << "\n1. Delete consecutive elements with sum 0 \n2. Merge Two LL\n3. Flattening a linked list\n4. Add 1 to a number represented as a linked list\n";
+        cout << "\n1. Delete consecutive elements with sum 0 \n2. Find n node from last\n3. Delete middle\n4. Detect loop\n5. Reverse in group\n";
         cin >> ch;
 
         switch (ch)
@@ -113,15 +248,22 @@ int main()
             break;
 
         case 2:
-            //findMiddle();
+            findFromLast();
             break;
 
         case 3:
-            //search();
+            deleteMiddle();
             break;
 
         case 4:
-            //deleteDup();
+            detectLoop();
+            break;
+
+        case 5:
+            cout << "Enter length of group: ";
+            cin >> l;
+            NODE = reverseInGroup(head,l);
+            displayWithNode(NODE);
             break;
 
         default:
