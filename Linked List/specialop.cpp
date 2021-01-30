@@ -2,6 +2,8 @@
 // Find nth node from the end of linked list
 // Detect loop in linked list
 // Remove loop from list
+// Reverse list in a group
+// Delete last occurence of an item in a list
 
 #include <iostream>
 using namespace std;
@@ -41,12 +43,12 @@ void displayList()
 
     while (temp != NULL)
     {
-        cout << temp->data <<"\t\t";
+        cout << temp->data << "\t\t";
         temp = temp->next;
     }
 }
 
-void displayWithNode(struct Node* start)
+void displayWithNode(struct Node *start)
 {
 
     cout << "List is : \n";
@@ -60,32 +62,36 @@ void displayWithNode(struct Node* start)
     }
 }
 
-void deleteCons(){
+void deleteCons()
+{
     temp = head;
     cur = 0;
     int sum;
 
-    while(temp->next!=NULL){
+    while (temp->next != NULL)
+    {
         sum = temp->data + temp->next->data;
 
-        if(sum == 0){
-            if(temp!=head){
+        if (sum == 0)
+        {
+            if (temp != head)
+            {
                 temp = temp->next->next;
                 nextnode = cur->next;
                 cur->next = temp;
-                delete(nextnode);
-                delete(nextnode->next);
+                delete (nextnode);
+                delete (nextnode->next);
             }
-            else{
+            else
+            {
                 nextnode = temp;
                 temp = temp->next->next;
                 head = temp;
                 delete (nextnode);
                 delete (nextnode->next);
             }
-            
         }
-        
+
         cur = temp;
         temp = temp->next;
     }
@@ -93,74 +99,81 @@ void deleteCons(){
     displayList();
 }
 
-void findFromLast(){
+void findFromLast()
+{
     temp = head;
-    int c = 0,i;
+    int c = 0, i;
     int t;
 
-    cout<<"Enter idex of node from last : ";
-    cin>>i;
+    cout << "Enter idex of node from last : ";
+    cin >> i;
 
-    while(temp != 0){
+    while (temp != 0)
+    {
         c++;
         temp = temp->next;
     }
 
-    t = (c-i)+1;
+    t = (c - i) + 1;
 
-    c= 0;
+    c = 0;
     temp = head;
     cur = 0;
-    while(c<t){
+    while (c < t)
+    {
         c++;
         cur = temp;
         temp = temp->next;
     }
 
-    cout<<cur->data;
-
-
+    cout << cur->data;
 }
 
-void deleteMiddle(){
+void deleteMiddle()
+{
     temp = head;
     cur = head;
     pre = 0;
 
-    while(temp != NULL && temp->next != NULL){
+    while (temp != NULL && temp->next != NULL)
+    {
         pre = cur;
         temp = temp->next->next;
         cur = cur->next;
     }
 
     pre->next = cur->next;
-    delete(cur);
+    delete (cur);
 
     displayList();
 }
 
-void removeLoop(struct Node* r){
+void removeLoop(struct Node *r)
+{
 
-    struct Node* p1;
+    struct Node *p1;
     struct Node *p2;
 
     p1 = head;
 
-    while(1){
+    while (1)
+    {
         p2 = r;
 
-        while(p2->next != r && p2->next != p1)
+        while (p2->next != r && p2->next != p1)
             p2 = p2->next;
-            
-        if(p2->next == p1) break;
-        
+
+        if (p2->next == p1)
+            break;
+
         p1 = p1->next;
     }
 
     p2->next = NULL;
 }
 
-void detectLoop(){
+void detectLoop()
+{
 
     // last = head;
     // first = head;
@@ -180,36 +193,71 @@ void detectLoop(){
         temp = temp->next->next;
         cur = cur->next;
 
-        if(cur == temp) removeLoop(cur);
+        if (cur == temp)
+            removeLoop(cur);
     }
 
     displayList();
-
 }
 
-Node *reverseInGroup (Node *t, int k)  
-{  
-    Node* current = t;  
-    Node* next = NULL;  
-    Node* prev = NULL;  
-    int count = 0;  
+Node *reverseInGroup(Node *t, int k)
+{
+    Node *current = t;
+    Node *next = NULL;
+    Node *prev = NULL;
+    int count = 0;
 
-    while (current != NULL && count < k)  
-    {  
-        next = current->next;  
-        current->next = prev;  
-        prev = current;  
-        current = next;  
-        count++;  
-    }  
+    while (current != NULL && count < k)
+    {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+        count++;
+    }
 
-    if (next != NULL)  
-    t->next = reverseInGroup(next, k);  
-  
+    if (next != NULL)
+        t->next = reverseInGroup(next, k);
+
     /* prev is new head of the input list */
-    return prev;  
-}  
-  
+    return prev;
+}
+
+void deleteLastOccur()
+{
+    int x;
+    cout << "Enter data : ";
+    cin >> x;
+
+    temp = head;
+
+    while (temp != 0)
+    {
+
+        if (temp->data == x)
+        {
+            cur = temp;
+        }
+
+        else if (temp->next != 0 && temp->next->data == x)
+        {
+            pre = temp;
+        }
+
+        temp = temp->next;
+    }
+
+    //cout << cur->next->data <<endl;
+
+    pre->next = cur->next;
+    delete(cur);
+
+    displayList();
+}
+
+
+
+
 
 int main()
 {
@@ -225,10 +273,10 @@ int main()
 
     cout << "Create nodes\n";
 
-    while (n < 12)
+    while (n < 8)
     {
-        //cin >> x;
-        createNode(n*2);
+        cin >> x;
+        createNode(x);
         n = n + 1;
     }
 
@@ -238,7 +286,7 @@ int main()
 
     while (exit == 0)
     {
-        cout << "\n1. Delete consecutive elements with sum 0 \n2. Find n node from last\n3. Delete middle\n4. Detect loop\n5. Reverse in group\n";
+        cout << "\n1. Delete consecutive elements with sum 0 \n2. Find n node from last\n3. Delete middle\n4. Detect loop\n5. Reverse in group\n6. Delete last occurence";
         cin >> ch;
 
         switch (ch)
@@ -262,8 +310,12 @@ int main()
         case 5:
             cout << "Enter length of group: ";
             cin >> l;
-            NODE = reverseInGroup(head,l);
+            NODE = reverseInGroup(head, l);
             displayWithNode(NODE);
+            break;
+
+        case 6:
+            deleteLastOccur();
             break;
 
         default:
