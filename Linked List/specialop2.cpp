@@ -1,3 +1,7 @@
+// Check if a Linked List is palindrome
+// Rotate a Linked List
+
+
 
 #include <iostream>
 #include <stack>
