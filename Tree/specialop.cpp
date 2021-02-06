@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <queue>
+#include <map>
 using namespace std;
 
 struct Node
@@ -133,6 +134,68 @@ void reverseLevelOrder(Node *root)
 }
 
 
+Node *reverseTreePathUtil(Node *root, int data,
+                          map<int, int> &temp, int level, int &nextpos)
+{
+    // return NULL if root NULL
+    if (root == NULL)
+        return NULL;
+
+    // Final condition
+    // if the node is found then
+    if (data == root->data)
+    {
+
+        // store the value in it's level
+        temp[level] = root->data;
+
+        // change the root value with the current
+        // next element of the map
+        root->data = temp[nextpos];
+
+        // increment in k for the next element
+        nextpos++;
+        return root;
+    }
+
+    // store the data in perticular level
+    temp[level] = root->data;
+
+    // We go to right only when left does not
+    // contain given data. This way we make sure
+    // that correct path node is stored in temp[]
+    Node *left, *right;
+    left = reverseTreePathUtil(root->left, data, temp,
+                               level + 1, nextpos);
+    if (left == NULL)
+        right = reverseTreePathUtil(root->right, data,
+                                    temp, level + 1, nextpos);
+
+    // If current node is part of the path,
+    // then do reversing.
+    if (left || right)
+    {
+        root->data = temp[nextpos];
+        nextpos++;
+        return (left ? left : right);
+    }
+
+    // return NULL if not element found
+    return NULL;
+}
+
+// Reverse Tree path
+void reverseTreePath(Node *root, int data)
+{
+    // store per level data
+    map<int, int> temp;
+
+    // it is for replacing the data
+    int nextpos = 0;
+
+    // reverse tree path
+    reverseTreePathUtil(root, data, temp, 0, nextpos);
+}
 
 int main()
 {
@@ -156,7 +219,7 @@ int main()
     int key;
     while (exit == 0)
     {
-        cout << "\n1. Search in tree \n2. Reverse Level Order Traversal\n";
+        cout << "\n1. Search in tree \n2. Reverse Level Order Traversal\n3. Reverse Path\n";
         cin >> ch;
 
         switch (ch)
@@ -169,6 +232,13 @@ int main()
 
         case 2:
             reverseLevelOrder(root);
+            break;
+
+        case 3:
+            cout << "Enter path endpoint : ";
+            cin >> s;
+            reverseTreePath(root,s);
+            inorder(root);
             break;
 
         default:
