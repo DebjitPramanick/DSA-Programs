@@ -31,7 +31,6 @@ void inorder(Node *temp)
 
 Node *createNode(int x)
 {
-
     newnode = new Node();
 
     newnode->data = x;
@@ -77,24 +76,21 @@ Node *insertNode(int x)
     return root;
 }
 
-
-void searchNode(Node *root,int k){
-
-    int found;
-
-    if(!root) return;
-    else{
-        if(root->data == k) found = 1;
-        else{
-            searchNode(root->left, k);
-            searchNode(root->right, k);
-        }
+int searchNode(Node *head, int f)
+{
+    if (!head)
+        return 0;
+    if (head->data == f)
+        return 1;
+    else
+    {
+        if (searchNode(head->left, f))
+            return 1;
+        if (searchNode(head->right, f))
+            return 1;
     }
-
-    if(found == 1) cout<<"Data found.";
+    return 0;
 }
-
-
 
 int findHeight(Node *head)
 {
@@ -202,7 +198,7 @@ int main()
 
     root = 0;
 
-    int s, ch;
+    int s, ch, found;
     int exit = 0;
 
     root = createNode(5);
@@ -227,7 +223,11 @@ int main()
         case 1:
             cout<<"Enter data to search : ";
             cin>>s;
-            searchNode(root,s);
+            found = searchNode(root, s);
+            if (found)
+                cout << "Data found.";
+            else
+                cout << "Data is not there.";
             break;
 
         case 2:
